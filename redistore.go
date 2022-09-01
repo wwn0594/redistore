@@ -374,7 +374,9 @@ func (s *RediStore) load(session *sessions.Session) (bool, error) {
 	}
 	data, err := conn.Do("HGETALL", s.keyPrefix+session.ID)
 	if err != nil {
-		return false, err
+		return false, nil
+		// ignore load err, since we are changing redis key type, just start a new session for user if load fail
+		// return false, err
 	}
 	if data == nil {
 		return false, nil // no data was associated with this key
